@@ -1,10 +1,13 @@
 local library = (syn and loadstring(game:HttpGet("https://github.com/GhostDuckyy/UI-Libraries/blob/main/DEADCELL%20REMAKE/source.lua?raw=true"))()) or loadstring(game:HttpGet("https://github.com/GhostDuckyy/UI-Libraries/blob/main/DEADCELL%20REMAKE/Modified/source.lua?raw=true"))();
 --setup
-local menu = library:new_window({size = Vector2.new(700,455)})
-local test = menu:new_page({name = "game"})
+local menu = library:new_window({Size = Vector2.new(600,420)})
+local test = menu:new_page({name = "localplayer"})
+local skywars = menu:new_page({name = "skywars"})
 local menu = menu:new_page({name = "menu"})
 local page = test:new_section({name = "Main", size = "Fill"})
-local page2 = test:new_section({name = "Miscellaneous", size = "Fill", side = "right"})
+local skywarspage = skywars:new_section({name = "Main", size = "Fill"})
+local plrlist = skywars:new_section({name = "Player List", size = "Fill", Side = "right"})
+local page2 = test:new_section({name = "Visuals", size = "Fill", side = "right"})
 --variables
 local lplr = game.Players.LocalPlayer
 UIS = game:GetService("UserInputService")
@@ -374,7 +377,6 @@ repeat
 until IsAlive(b)
 local F = tick()
 n("Autowin Started", "Made by Fern#5747 v" .. d)
-a([[loadstring(game:HttpGet("https://raw.githubusercontent.com/Kelvinouo/Hub/master/skywars_autowin.lua", true))()]])
 local C = 0
 repeat
     for E, m in next, workspace.BlockContainer.Map.Chests:GetChildren() do
@@ -1322,7 +1324,9 @@ page2:new_keybind({name = "Float", flag = 'keybind4', default = Enum.KeyCode.X, 
      library.notify("Float has been disabled!", 2.5)
 end})
 
-page2:new_keybind({name = "AutoWin", flag = 'keybind4', default = Enum.KeyCode.M, mode = "Toggle", ignore = true, callback = function(test)
+--game
+skywarspage:new_seperator({name = "AutoWin"})
+skywarspage:new_keybind({name = "AutoWin", flag = 'keybind5', default = Enum.KeyCode.M, mode = "Toggle", ignore = true, callback = function(test)
      if test == true then
         repeat
         wait()
@@ -1599,8 +1603,7 @@ until I == 0
     library.notify("AutoWin is now enabled by the keybind!", 2.5)
 end})
 
---game
-page:new_button({name = "AutoWin", callback = function() if game.PlaceId == 8542275097 or game.PlaceId == 8592115909 then
+skywarspage:new_button({name = "AutoWin", callback = function() if game.PlaceId == 8542275097 or game.PlaceId == 8592115909 then
     repeat
         wait()
     until game:IsLoaded() and game.Players.LocalPlayer and game.Players.LocalPlayer.Character
@@ -1873,10 +1876,161 @@ repeat
     end
     wait()
 until I == 0 end})
+skywarspage:new_seperator({name = "Autonomous"})
+skywarspage:new_button({name = "AutoGrab Chests", callback = function()
+    repeat
+        wait()
+    until game:IsLoaded() and game.Players.LocalPlayer and game.Players.LocalPlayer.Character
+game:GetService("StarterGui"):SetCoreGuiEnabled(Enum.CoreGuiType.PlayerList, true)
+local b = game.Players.LocalPlayer
+local c = game:GetService("TweenService")
+local d = "0.7c - 7/4"
+local e = {
+    FULLREMOTENAMES = {},
+    Remotes = {},
+    Events = require(game.Players.LocalPlayer.PlayerScripts.TS.events).Events
+}
+local f = Instance.new("ScreenGui")
+f.Name = "?"
+f.ResetOnSpawn = false
+f.Parent = game:GetService("CoreGui")
 
-local autochest = false
-page:new_toggle({name = "AutoOpen Chests", risky = false, state = false, flag = "grabchest", callback = function(value) 
-    autochest = value           
+function getRemoteName(r)
+    local s = {}
+    pcall(
+        function()
+            local t = debug.getconstants(r)
+            for l = 1, #t do
+                local m = t[l]
+                if typeof(m) == "string" and table.find(e.FULLREMOTENAMES, m) then
+                    table.insert(s, e.Events[m])
+                end
+            end
+        end
+    )
+    return #s > 1 and s or #s == 1 and s[1] or nil
+end
+function hasItem(u)
+    return e.inventoryController.hasItem(nil, u)
+end
+function getHoldItem()
+    local v = e.HotbarController:getHeldItemInfo()
+    return v and v.Name or nil
+end
+function IsAlive(w)
+    if
+        w.Character and w.Character:FindFirstChild("HumanoidRootPart") and w.Character:FindFirstChild("Humanoid") and
+            w.Character.Humanoid.Health > 0
+     then
+        return true
+    end
+    return false
+end
+function magnitude(x, y, z)
+    if typeof(x) == "Instance" and z then
+        x = x.Character.HumanoidRootPart.Position
+    end
+    if typeof(y) == "Instance" and z then
+        y = y.Character.HumanoidRootPart.Position
+    end
+    if typeof(x) == "Instance" and not z then
+        x = x.Position
+    end
+    if typeof(y) == "Instance" and not z then
+        y = y.Position
+    end
+    if typeof(x) == "CFrame" then
+        x = x.p
+    end
+    if typeof(y) == "CFrame" then
+        y = y.p
+    end
+    return (x - y).magnitude
+end
+
+for l, m in next, getgc(true) do
+    if typeof(m) == "table" then
+        for A, B in next, m do
+            if typeof(A) == "string" and (string.find(A, "Controller") or string.find(A, "Util")) then
+                e[A] = m[A]
+            end
+        end
+    end
+end
+for l, m in next, e.Events do
+    table.insert(e.FULLREMOTENAMES, l)
+end
+for l, m in next, e do
+    if typeof(m) == "table" then
+        for A, B in next, m do
+            local C = getRemoteName(B)
+            if C then
+                if not e.Remotes[l] then
+                    e.Remotes[l] = {}
+                end
+                e.Remotes[l][A] = C
+            end
+        end
+    end
+end
+e.Remotes["ChestController"]["onStart"]:connect(
+    function(D, s)
+        for E, m in next, s do
+            e.Remotes["ChestController"]["updateChest"]:fire(D, m.Type, -m.Quantity)
+        end
+    end
+)
+repeat
+    wait()
+until IsAlive(b)
+local F = tick()
+local C = 0
+repeat
+    for E, m in next, workspace.BlockContainer.Map.Chests:GetChildren() do
+        if IsAlive(b) and m:FindFirstChild("PrimaryPart") then
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = m.PrimaryPart.CFrame + Vector3.new(0, 5, 0)
+            wait(0.1)
+            e.Remotes["ChestController"]["openChest"]:fire(m)
+            C = C + 1
+        end
+    end
+    wait()
+until C >= 2
+local G = {"Bronze", "Iron", "Gold", "Diamond", "Emerald", "Onyx"}
+game:GetService("RunService").Heartbeat:Connect(
+    function()
+        for E, m in next, game.Players:GetPlayers() do
+            if m ~= b and IsAlive(m) and IsAlive(b) and magnitude(m, b, 1) < 10 then
+                local H = 1
+                for l, B in next, G do
+                    if hasItem(B .. "Sword") and l > H then
+                        H = l
+                    end
+                end
+                e.Remotes["HotbarController"]["updateActiveItem"]:fire(G[H] .. "Sword")
+                e.Remotes["MeleeController"]["strikeMobile"]:fire(m)
+            end
+        end
+    end
+)
+end})
+
+skywarspage:new_toggle({name = "Join Queue", risky = false, state = false, flag = "joinqueue", callback = function(value) 
+    if identifyexecutor() == "Synapse X" then
+    syn.set_thread_identity(2)
+else
+    setidentity(2)
+end
+local v1 = require(game:GetService("ReplicatedStorage"):WaitForChild("rbxts_include"):WaitForChild("RuntimeLib"));
+
+local l__Flamework__4 = v1.import(script, v1.getModule(script, "@flamework", "core").out).Flamework;
+
+l__Flamework__4.resolveDependency("RR8"):joinQueue(p3);
+if identifyexecutor() == "Synapse X" then
+    syn.set_thread_identity(7)
+else
+    setidentity(7)
+end
 end})
 --end
 
@@ -1897,7 +2051,7 @@ theme_pickers["Section Background"] = accent:new_colorpicker({name = "section ba
 theme_pickers["Text"] = accent:new_colorpicker({name = "text",flag = 'theme_text', default = Color3.fromRGB(245, 245, 245), callback = function(state) library:ChangeThemeOption("Text", state) end})
 theme_pickers["Risky Text"] = accent:new_colorpicker({name = "risky text",flag = 'theme_risky', default = Color3.fromRGB(245, 239, 120), callback = function(state) library:ChangeThemeOption("Risky Text", state) end})
 theme_pickers["Object Background"] = accent:new_colorpicker({name = "element background",flag = 'theme_element', default = Color3.fromRGB(41,41,50), callback = function(state) library:ChangeThemeOption("Object Background", state) end})
-accent:new_dropdown({flag = "settings/menu/effects", name = "accent effects", options = {"None", "rainbow", "shift", "reverse shift"}, default = "rainbow"});
+accent:new_dropdown({flag = "settings/menu/effects", name = "accent effects", options = {"None", "rainbow", "shift", "reverse shift"}, default = "None"});
 accent:new_slider({flag = "settings/menu/effect_speed", name = "effect speed", min = 0.1, max = 2, default = 0.5, float = 0.1})
 game:GetService("RunService").Heartbeat:Connect(function()
     local AccentEffect = library.flags["settings/menu/effects"];
