@@ -2016,6 +2016,7 @@ game:GetService("RunService").Heartbeat:Connect(
 end})
 
 skywarspage:new_toggle({name = "Join Queue", risky = false, state = false, flag = "joinqueue", callback = function(value) 
+    if value == true then
     if identifyexecutor() == "Synapse X" then
     syn.set_thread_identity(2)
 else
@@ -2030,6 +2031,7 @@ if identifyexecutor() == "Synapse X" then
     syn.set_thread_identity(7)
 else
     setidentity(7)
+end
 end
 end})
 --end
