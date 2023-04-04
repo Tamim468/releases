@@ -1,4 +1,4 @@
-local library = (syn and loadstring(game:HttpGet("https://github.com/GhostDuckyy/UI-Libraries/blob/main/DEADCELL%20REMAKE/source.lua?raw=true"))()) or loadstring(game:HttpGet("https://github.com/GhostDuckyy/UI-Libraries/blob/main/DEADCELL%20REMAKE/Modified/source.lua?raw=true"))();
+local library = loadstring(game:HttpGet("https://github.com/Tamim468/releases/blob/main/uilib.lua?raw=true"))();
 --setup
 local menu = library:new_window({Size = Vector2.new(600,420)})
 local test = menu:new_page({name = "localplayer"})
@@ -1084,6 +1084,14 @@ page:new_toggle({name = "Float", risky = false, state = false, flag = "WaterWalk
      library.notify("Float has been disabled!", 2.5)
 end})
 
+page:new_toggle({name = "Fake Lag", risky = false, state = false, flag = "fakelag", callback = function(value)
+	while value == true do wait(0.1)
+		lplr.Character.HumanoidRootPart.Anchored = false
+		wait(0.1)
+		lplr.Character.HumanoidRootPart.Anchored = true
+	 end
+end})
+
 --esp setup
 getgenv().cham = false
 getgenv().nameESP = false
@@ -2092,4 +2100,4 @@ menu_other:new_seperator({name = "game theme"})
 --end
 
 library.notify("Valyse hub has been loaded! Enjoy by IceyTamim#6083", 5.5)
-queue([[loadstring(game:HttpGet("https://raw.githubusercontent.com/Tamim468/releases/main/valysedeadcell.lua", true))()]])
+queue([[loadstring(game:HttpGet("https://raw.githubusercontent.com/Tamim468/releases/main/faypo-pub.lua", true))()]])
