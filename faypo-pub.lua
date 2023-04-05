@@ -57,7 +57,7 @@ function randomString()
 	end
 	return table.concat(array)
 end
-
+local fakelag = false
 game.RunService.RenderStepped:Connect(function()
  if velocity == true then
    local HRP = game.Players.LocalPlayer.Character.HumanoidRootPart
@@ -143,10 +143,10 @@ game.RunService.RenderStepped:Connect(function()
           game.Players.LocalPlayer.Character.Humanoid.Jump = true
        end
  elseif fakelag == true then
-     wait(0.1)
+     wait(0.4)
+     lplr.Character.HumanoidRootPart.Anchored = true
+     wait(0.4)
      lplr.Character.HumanoidRootPart.Anchored = false
-		wait(0.1)
-		lplr.Character.HumanoidRootPart.Anchored = true
  elseif autowin == true then
        if game.PlaceId == 8542275097 or game.PlaceId == 8592115909 then
     repeat
@@ -1088,7 +1088,6 @@ page:new_toggle({name = "Float", risky = false, state = false, flag = "WaterWalk
      end
      library.notify("Float has been disabled!", 2.5)
 end})
-local fakelag = false
 page:new_toggle({name = "Fake Lag", risky = false, state = false, flag = "fakelag", callback = function(value)
      fakelag = value
 end})
