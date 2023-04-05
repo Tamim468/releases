@@ -1,4 +1,4 @@
-local library = loadstring(game:HttpGet("https://github.com/Tamim468/releases/blob/main/uilib.lua?raw=true"))();
+local library = (syn and loadstring(game:HttpGet("https://raw.githubusercontent.com/Tamim468/releases/main/synonlyuilib.lua"))()) or loadstring(game:HttpGet("https://raw.githubusercontent.com/Tamim468/releases/main/uilib.lua"))();
 --setup
 local menu = library:new_window({Size = Vector2.new(600,420)})
 local test = menu:new_page({name = "localplayer"})
@@ -142,6 +142,11 @@ game.RunService.RenderStepped:Connect(function()
        while bunnyhop do wait()
           game.Players.LocalPlayer.Character.Humanoid.Jump = true
        end
+ elseif fakelag == true then
+     wait(0.1)
+     lplr.Character.HumanoidRootPart.Anchored = false
+		wait(0.1)
+		lplr.Character.HumanoidRootPart.Anchored = true
  elseif autowin == true then
        if game.PlaceId == 8542275097 or game.PlaceId == 8592115909 then
     repeat
@@ -1083,13 +1088,9 @@ page:new_toggle({name = "Float", risky = false, state = false, flag = "WaterWalk
      end
      library.notify("Float has been disabled!", 2.5)
 end})
-
+local fakelag = false
 page:new_toggle({name = "Fake Lag", risky = false, state = false, flag = "fakelag", callback = function(value)
-	while value == true do wait(0.1)
-		lplr.Character.HumanoidRootPart.Anchored = false
-		wait(0.1)
-		lplr.Character.HumanoidRootPart.Anchored = true
-	 end
+     fakelag = value
 end})
 
 --esp setup
