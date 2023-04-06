@@ -2,12 +2,16 @@ local library = (syn and loadstring(game:HttpGet("https://raw.githubusercontent.
 --setup
 local menu = library:new_window({Size = Vector2.new(600,420)})
 local test = menu:new_page({name = "localplayer"})
+test:open()
 local skywars = menu:new_page({name = "skywars"})
 local menu = menu:new_page({name = "menu"})
 local page = test:new_section({name = "Main", size = "Fill"})
 local skywarspage = skywars:new_section({name = "Main", size = "Fill"})
 local plrlist = skywars:new_section({name = "Player List", size = "Fill", Side = "right"})
-local page2 = test:new_section({name = "Visuals", size = "Fill", side = "right"})
+local holder = test:new_section_holder({name = "Features", size = "Fill", Side = "right"})
+local page2 = holder:new_section({name = "Extra", size = "Fill", side = "right"})
+local page3 = holder:new_section({name = "Keybinds", size = "Fill", side = "right"})
+page2:open()
 --variables
 local lplr = game.Players.LocalPlayer
 UIS = game:GetService("UserInputService")
@@ -145,8 +149,8 @@ game.RunService.RenderStepped:Connect(function()
  elseif fakelag == true then
      wait(0.4)
      lplr.Character.HumanoidRootPart.Anchored = true
-     wait(0.4)
-     lplr.Character.HumanoidRootPart.Anchored = false
+		wait(0.6)
+		lplr.Character.HumanoidRootPart.Anchored = false
  elseif autowin == true then
        if game.PlaceId == 8542275097 or game.PlaceId == 8592115909 then
     repeat
@@ -1088,6 +1092,7 @@ page:new_toggle({name = "Float", risky = false, state = false, flag = "WaterWalk
      end
      library.notify("Float has been disabled!", 2.5)
 end})
+
 page:new_toggle({name = "Fake Lag", risky = false, state = false, flag = "fakelag", callback = function(value)
      fakelag = value
 end})
@@ -1144,11 +1149,19 @@ page2:new_toggle({name = "Team Check", risky = false, state = false, flag = "Tea
     getgenv().useTeamColor = bool
 end})
 
+page2:new_seperator({name = "Extras"})
+
+page2:new_slider({flag = "gravity", name = "Gravity", min = 0, max = 320, default = 196.2, float = 0.1, callback = function(value)
+     workspace.Gravity = value
+end})
+
+page2:new_seperator({name = "Nothing to be added here yet."})
+
 --end
 
-page2:new_seperator({name = "Keybinds"})
+page3:new_seperator({name = "Keybinds"})
 
-page2:new_keybind({name = "Fly", flag = 'keybind1', default = Enum.KeyCode.F, mode = "Toggle", ignore = true, callback = function(test)
+page3:new_keybind({name = "Fly", flag = 'keybind1', default = Enum.KeyCode.F, mode = "Toggle", ignore = true, callback = function(test)
     if test then
 _G.FLYING = false
 local LP = game:service('Players').LocalPlayer
@@ -1224,7 +1237,7 @@ else
     end
 end})
 
-page2:new_keybind({name = "Noclip", flag = 'keybind2', default = Enum.KeyCode.R, mode = "Toggle", ignore = true, callback = function(test)
+page3:new_keybind({name = "Noclip", flag = 'keybind2', default = Enum.KeyCode.R, mode = "Toggle", ignore = true, callback = function(test)
    if test == true then
         noclip()
         library.notify("Noclip is now enabled by the keybind!", 2.5)
@@ -1234,7 +1247,7 @@ page2:new_keybind({name = "Noclip", flag = 'keybind2', default = Enum.KeyCode.R,
     end
 end})
 
-page2:new_keybind({name = "Bunny Hop", flag = 'keybind3', default = Enum.KeyCode.C, mode = "Toggle", ignore = true, callback = function(test)
+page3:new_keybind({name = "Bunny Hop", flag = 'keybind3', default = Enum.KeyCode.C, mode = "Toggle", ignore = true, callback = function(test)
      if test == true then
         bunnyhop = true
         library.notify("Bunny hop is now enabled by the keybind!", 2.5)
@@ -1244,7 +1257,7 @@ page2:new_keybind({name = "Bunny Hop", flag = 'keybind3', default = Enum.KeyCode
     end
 end})
 
-page2:new_keybind({name = "Toggle ESP", flag = 'keybind5', default = Enum.KeyCode.V, mode = "Toggle", ignore = true, callback = function(test)
+page3:new_keybind({name = "Toggle ESP", flag = 'keybind5', default = Enum.KeyCode.V, mode = "Toggle", ignore = true, callback = function(test)
      if getgenv().esp_loaded == false then
         getgenv().esp_loaded = true
         loadstring(game:HttpGet("https://raw.githubusercontent.com/Tamim468/a/main/bruh.lua", true))()
@@ -1257,7 +1270,7 @@ page2:new_keybind({name = "Toggle ESP", flag = 'keybind5', default = Enum.KeyCod
 	end
 end})
 
-page2:new_keybind({name = "Float", flag = 'keybind4', default = Enum.KeyCode.X, mode = "Toggle", ignore = true, callback = function(test)
+page3:new_keybind({name = "Float", flag = 'keybind4', default = Enum.KeyCode.X, mode = "Toggle", ignore = true, callback = function(test)
  if test == true then
      if lplr.Character and not lplr.Character:FindFirstChild(floatName) then
 		task.spawn(function()
@@ -1330,6 +1343,10 @@ page2:new_keybind({name = "Float", flag = 'keybind4', default = Enum.KeyCode.X, 
 	    end
      end
      library.notify("Float has been disabled!", 2.5)
+end})
+
+page3:new_keybind({name = "Fake Lag", flag = 'keybind5', default = Enum.KeyCode.Z, mode = "Toggle", ignore = true, callback = function(test)
+    fakelag = test
 end})
 
 --game
@@ -2096,7 +2113,7 @@ menu_other:new_seperator({name = "server"})
 menu_other:new_button({name = "rejoin", confirm = true, callback = function() game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, game.JobId) end})
 menu_other:new_button({name = "copy join script", callback = function() setclipboard(([[game:GetService("TeleportService"):TeleportToPlaceInstance(%s, "%s")]]):format(game.PlaceId, game.JobId)) end})
 menu_other:new_button({name = "test", callback = function() library.notify("this is a test notif lol", 5) end})
-menu_other:new_seperator({name = "game theme"})
+menu_other:new_seperator({name = ""})
 --end
 
 library.notify("Valyse hub has been loaded! Enjoy by IceyTamim#6083", 5.5)
