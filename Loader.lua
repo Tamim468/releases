@@ -6,7 +6,8 @@ end)
 local games = {
     8542259458,
     855499080,
-    662417684
+    662417684,
+    10277607801
 }
 for i, v in pairs(games) do
     if i == game.PlaceId or i == game.GameId then
