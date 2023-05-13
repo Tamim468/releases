@@ -13,5 +13,6 @@ for i, v in pairs(games) do
         loadstring(game:HttpGet('https://raw.githubusercontent.com/Tamim468/releases/main/games/' .. tostring(game.PlaceId)))()
         else
         loadstring(game:HttpGet('https://raw.githubusercontent.com/Tamim468/releases/main/Universal.lua'))()
+        break
     end
 end
