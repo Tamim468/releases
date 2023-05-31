@@ -12,7 +12,9 @@ local id = {
 }
 
 for i, v in pairs(id) do
-    if v == game.PlaceId or v == game.GameId then
+    if v == game.PlaceId then
         loadstring(game:HttpGet('https://raw.githubusercontent.com/Tamim468/releases/main/games/' ..game.PlaceId..".lua"))()
+    elseif v == game.GameId then
+        loadstring(game:HttpGet('https://raw.githubusercontent.com/Tamim468/releases/main/games/' ..game.GameId..".lua"))()
     end
 end
