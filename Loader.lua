@@ -7,8 +7,10 @@ local games = {
     8542259458,
     855499080,
     662417684,
-    10277607801
+    10277607801,
+    6181241408
 }
+
 for i, v in pairs(games) do
     if i == game.PlaceId or i == game.GameId then
         loadstring(game:HttpGet('https://raw.githubusercontent.com/Tamim468/releases/main/games/' .. tostring(game.PlaceId)))()
